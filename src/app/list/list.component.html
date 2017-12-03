@@ -1,0 +1,6 @@
+<ul>
+    <li *ngFor="let news of hackerNews">
+        <h3>{{news.title}}</h3>
+        <a [href]="news.url" target="_blank">{{url}}</a>
+    </li>
+</ul>
