@@ -1,8 +1,15 @@
-ul {
+ol {
     li {
         h3 {
-            margin-top: 20px;
-            margin-bottom: 0px;
+            margin: 20px 0px 0px 0px;
         }
+    }
+}
+
+.pagination-toolbar {
+    padding-left: 40px;
+    display: flex;
+    button {
+        width: 300px;
     }
 }

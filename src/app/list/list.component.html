@@ -1,6 +1,11 @@
-<ul>
+<ol>
     <li *ngFor="let news of hackerNews">
-        <h3>{{news.title}}</h3>
-        <a [href]="news.url" target="_blank">{{url}}</a>
+        <h3 class="news-heading">{{news.title}}</h3>
+        <a [href]="news.url" target="_blank">{{news.url}}</a>
     </li>
-</ul>
+</ol>
+
+<div class="pagination-toolbar">
+    <button (click)="goToPreviousPage()">Previous</button>
+    <button (click)="goToNextPage()">Next</button>
+</div>
