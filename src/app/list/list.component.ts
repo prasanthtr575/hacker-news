@@ -12,6 +12,7 @@ export class ListComponent implements OnInit {
   pageNumber: number = 1;
   pageSize: number = 10;
   maxLimit: number = 5;
+  newsSLNOStart: number;
   hnIds: any[];
   hackerNews: any[] = [];
   url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
@@ -30,6 +31,7 @@ export class ListComponent implements OnInit {
 
   fetchHackerNews() {
     let page = this.getPageIndex(this.pageNumber);
+    this.newsSLNOStart = page.startIndex + 1;
 
     this.hackerNews.length = 0;
 
