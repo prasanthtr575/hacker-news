@@ -1,11 +1,20 @@
-<ol [start]="newsSLNOStart">
-    <li *ngFor="let news of hackerNews">
-        <h3 class="news-heading">{{news.title}}</h3>
-        <a [href]="news.url" target="_blank">{{news.url}}</a>
-    </li>
-</ol>
+<div>
+    <h1>
+        {{ title }}
+        <img src="https://loading.io/spinners/pies/lg.pie-chart-loading-gif.gif" *ngIf="loading">
+    </h1>
+    <hr>
 
-<div class="pagination-toolbar">
-    <button (click)="goToPreviousPage()">Previous</button>
-    <button (click)="goToNextPage()">Next</button>
+    <ol [start]="newsSLNOStart">
+        <li *ngFor="let news of hackerNews">
+            <h3 class="news-heading">{{news.title}}</h3>
+            <a [href]="news.url" target="_blank">{{news.url}}</a>
+        </li>
+    </ol>
+
+    <div class="pagination-toolbar">
+        <button (click)="goToPreviousPage()" [disabled]="loading">Previous</button>
+        <button (click)="goToNextPage()" [disabled]="loading">Next</button>
+        <i>Page No - {{this.pageNumber}}</i>
+    </div>
 </div>

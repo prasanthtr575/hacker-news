@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { debug } from 'util';
-import { denodeify } from 'q';
+import { denodeify, Promise } from 'q';
+import * as Rx from 'rxjs/Rx';
 
 @Component({
   selector: 'hn-list',
@@ -9,21 +10,34 @@ import { denodeify } from 'q';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  title = 'Hacker News';
   pageNumber: number = 1;
   pageSize: number = 10;
   maxLimit: number = 5;
   newsSLNOStart: number;
   hnIds: any[];
   hackerNews: any[] = [];
-  url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
-
+  observables: any[] = [];
+  loading: boolean = false;
+  
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     // Make the HTTP request:
-    this.http.get(this.url).subscribe(data => {
-      // Read the result field from the JSON response.
+    let url = 'https://hacker-news.firebaseio.com/v0/topstories.json';
+
+    fetch(url).then(response => response.json())
+    .then(data => {
       this.hnIds = <any>data;
+       
+      let noOfNews = this.hnIds.length;
+      this.maxLimit = noOfNews / this.pageSize + noOfNews % this.pageSize;
+      
+      console.log(`
+        page size = ${this.pageSize}
+        total No = ${this.hnIds.length}
+        pageNo = ${this.maxLimit}
+      `)
 
       this.fetchHackerNews();
     });
@@ -33,19 +47,32 @@ export class ListComponent implements OnInit {
     let page = this.getPageIndex(this.pageNumber);
     this.newsSLNOStart = page.startIndex + 1;
 
-    this.hackerNews.length = 0;
+    this.observables.length = 0;
+    
+    this.startLoading();
 
     for(let i = page.startIndex; i <= page.endIndex; i++) {
       let newsId = this.hnIds[i];
-      let url = 'https://hacker-news.firebaseio.com/v0/item/' + newsId + '.json';
+      let url = `https://hacker-news.firebaseio.com/v0/item/${newsId}.json`;
 
-      this.http.get(url).subscribe(data => {
-        // Read the result field from the JSON response.
-        this.hackerNews.push(data);
-
-        window.scrollTo(0, document.body.clientHeight);
-      });
+      this.observables.push(
+        this.http.get(url)
+      );
     }
+
+    Rx.Observable
+      .forkJoin(this.observables)
+      .subscribe(
+        data => { 
+          this.hackerNews.length = 0; 
+          this.hackerNews = data;
+
+          this.stopLoading();
+        },
+        error => { 
+          throw new Error(error) 
+        }
+      )
   }
 
   getPageIndex(pageNumber) {
@@ -70,5 +97,13 @@ export class ListComponent implements OnInit {
       this.pageNumber++;
       this.fetchHackerNews();
     }
+  }
+
+  startLoading() {
+    this.loading = true;
+  }
+
+  stopLoading() {
+    this.loading = false;
   }
 }

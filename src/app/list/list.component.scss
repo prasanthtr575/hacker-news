@@ -1,3 +1,12 @@
+h1 {
+    img {
+        width: 70px;
+        height: 70px;
+        position: fixed;
+        top: 10px;
+    }
+}
+
 ol {
     li {
         h3 {
@@ -11,5 +20,9 @@ ol {
     display: flex;
     button {
         width: 300px;
+    }
+
+    i {
+        margin-left: 20px;
     }
 }
