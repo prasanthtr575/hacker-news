@@ -45,10 +45,8 @@ export class ListComponent implements OnInit {
 
   fetchHackerNews() {
     let page = this.getPageIndex(this.pageNumber);
-    this.newsSLNOStart = page.startIndex + 1;
-
-    this.observables.length = 0;
     
+    this.observables.length = 0;
     this.startLoading();
 
     for(let i = page.startIndex; i <= page.endIndex; i++) {
@@ -64,7 +62,8 @@ export class ListComponent implements OnInit {
       .forkJoin(this.observables)
       .subscribe(
         data => { 
-          this.hackerNews.length = 0; 
+          this.hackerNews.length = 0;
+          this.newsSLNOStart = page.startIndex + 1;
           this.hackerNews = data;
 
           this.stopLoading();
@@ -105,5 +104,19 @@ export class ListComponent implements OnInit {
 
   stopLoading() {
     this.loading = false;
+  }
+
+  pageNumbers(page, maxLimit = 50, pageSize = 10) {
+    let startPage = page - Math.floor(pageSize / 2);
+    let firstPage = startPage > 0 ? startPage : 1;
+    let endPage = firstPage + pageSize - 1;
+    let lastPage = endPage < maxLimit ? endPage : maxLimit;
+    let currentPage = page;
+    let noOfPages = lastPage - firstPage + 1;
+
+    firstPage = (noOfPages > 0 && noOfPages < pageSize) ? 
+      lastPage - pageSize : firstPage;
+
+    return { firstPage, currentPage, lastPage};
   }
 }
