@@ -14,6 +14,9 @@
 
     <div class="pagination-toolbar">
         <button (click)="goToPreviousPage()" [disabled]="loading">Previous</button>
+        <ul>
+            <li *ngFor="let number of pageButtonNumbers">{{number}}</li>
+        </ul>
         <button (click)="goToNextPage()" [disabled]="loading">Next</button>
         <i>Page No - {{this.pageNumber}}</i>
     </div>

@@ -19,6 +19,7 @@ export class ListComponent implements OnInit {
   hackerNews: any[] = [];
   observables: any[] = [];
   loading: boolean = false;
+  pageButtonNumbers: any[];
   
   constructor(private http: HttpClient) { }
 
@@ -33,12 +34,6 @@ export class ListComponent implements OnInit {
       let noOfNews = this.hnIds.length;
       this.maxLimit = noOfNews / this.pageSize + noOfNews % this.pageSize;
       
-      console.log(`
-        page size = ${this.pageSize}
-        total No = ${this.hnIds.length}
-        pageNo = ${this.maxLimit}
-      `)
-
       this.fetchHackerNews();
     });
   }
@@ -64,6 +59,7 @@ export class ListComponent implements OnInit {
         data => { 
           this.hackerNews.length = 0;
           this.newsSLNOStart = page.startIndex + 1;
+          this.pageButtonNumbers = this.pageNumbers(this.pageNumber).pages;
           this.hackerNews = data;
 
           this.stopLoading();
@@ -117,6 +113,8 @@ export class ListComponent implements OnInit {
     firstPage = (noOfPages > 0 && noOfPages < pageSize) ? 
       lastPage - pageSize : firstPage;
 
-    return { firstPage, currentPage, lastPage};
+    let pages = Array(lastPage - firstPage + 1).fill(null).map((_, idx) => firstPage + idx);
+    
+    return { firstPage, currentPage, lastPage, pages};
   }
 }
