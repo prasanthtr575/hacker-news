@@ -112,6 +112,10 @@ export class ListComponent implements OnInit {
     return this.firstPageNumber !== 1;
   }
 
+  isSelectedPage(pageNumber) {
+    return pageNumber === this.pageNumber;
+  }
+
   startLoading() {
     this.loading = true;
   }
