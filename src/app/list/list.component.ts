@@ -15,11 +15,13 @@ export class ListComponent implements OnInit {
   pageSize: number = 10;
   maxLimit: number = 5;
   newsSLNOStart: number;
-  hnIds: any[];
+  hnIds: any[] = [];
   hackerNews: any[] = [];
   observables: any[] = [];
   loading: boolean = false;
   pageButtonNumbers: any[];
+  firstPageNumber: number;
+  lastPageNumber: number;
   
   constructor(private http: HttpClient) { }
 
@@ -59,7 +61,10 @@ export class ListComponent implements OnInit {
         data => { 
           this.hackerNews.length = 0;
           this.newsSLNOStart = page.startIndex + 1;
-          this.pageButtonNumbers = this.pageNumbers(this.pageNumber).pages;
+          let pageInfo = this.pageNumbers(this.pageNumber);
+          this.pageButtonNumbers = pageInfo.pages;
+          this.firstPageNumber = pageInfo.firstPage;
+          this.lastPageNumber = pageInfo.lastPage;
           this.hackerNews = data;
 
           this.stopLoading();
@@ -92,6 +97,19 @@ export class ListComponent implements OnInit {
       this.pageNumber++;
       this.fetchHackerNews();
     }
+  }
+
+  gotoPage(pageNumber) {
+    this.pageNumber = pageNumber;
+    this.fetchHackerNews();
+  }
+
+  isNotLastPage() {
+    return this.lastPageNumber !== this.maxLimit;
+  }
+
+  isNotFirstPage() {
+    return this.firstPageNumber !== 1;
   }
 
   startLoading() {

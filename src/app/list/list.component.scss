@@ -18,17 +18,10 @@ ol {
 .pagination-toolbar {
     padding-left: 40px;
     display: flex;
-   
+    button {
+        margin: 2px;
+    }
     i {
         margin-left: 20px;
-    }
-}
-
-ul {
-    display: flex;
-    padding: 0px;
-    list-style: none;
-    li{
-        padding: 10px;
     }
 }

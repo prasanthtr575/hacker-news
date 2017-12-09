@@ -13,11 +13,9 @@
     </ol>
 
     <div class="pagination-toolbar">
-        <button (click)="goToPreviousPage()" [disabled]="loading">Previous</button>
-        <ul>
-            <li *ngFor="let number of pageButtonNumbers">{{number}}</li>
-        </ul>
-        <button (click)="goToNextPage()" [disabled]="loading">Next</button>
+        <button (click)="goToPreviousPage()" [disabled]="loading" *ngIf="isNotFirstPage()"><<</button>
+        <button (click)="gotoPage(number)" [disabled]="loading" *ngFor="let number of pageButtonNumbers">{{number}}</button>
+        <button (click)="goToNextPage()" [disabled]="loading" *ngIf="isNotLastPage()">>></button>
         <i>Page No - {{this.pageNumber}}</i>
     </div>
 </div>
